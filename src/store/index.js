@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 import firebase from '@/plugins/firebase';
 import router from '@/router';
 import auth from './modules/auth';
-import authGuard from '../guards/auth.guard';
+import notify from './modules/notify';
+// import authGuard from '../guards/auth.guard';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
   },
   modules: {
     auth,
+    notify,
   },
 });
 
@@ -28,6 +30,6 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-authGuard();
+// authGuard();
 
 export default store;

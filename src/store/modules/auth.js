@@ -31,7 +31,7 @@ const authStore = {
       },
       root: true,
     },
-    async login({ commit }, { email, password }) {
+    async login({ commit, dispatch }, { email, password }) {
       console.log(email, password);
       // context.commit -вызов мутации
       // context.dispatch  - диспатч вызывает экшн
@@ -39,7 +39,12 @@ const authStore = {
         commit(LOGIN_LOADER, true);
         await firebaseLogin(email, password);
       } catch (error) {
-        console.log(error);
+        dispatch('loadMessage', {
+          type: 'error',
+          message: error.message,
+          duration: 6000,
+          showClose: true,
+        }, { root: true });
       } finally {
         commit(LOGIN_LOADER, false);// выключаем буль прелодера
       }

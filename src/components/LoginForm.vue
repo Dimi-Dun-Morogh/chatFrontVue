@@ -1,5 +1,7 @@
 <template>
   <div class="login-form">
+    <h1 class="login-form-title">Welcome</h1>
+    <p class="login-form-description"> Welcome to the live chat. Please login to join</p>
     <ElForm
     :model="formData"
     :rules="rules"
@@ -20,7 +22,11 @@
     >
        <ElInput v-model="formData.password" type="password" />
      </ElFormItem>
-      <ElButton
+     <router-link :to="{name: 'ForgotPassword'}">
+       <ElLink type="info">Forgot password? Reset password</ElLink>
+        </router-link>
+        <div class="form-action">
+       <ElButton
         type="success"
         plain
         size="small"
@@ -29,6 +35,10 @@
         >
         Login
       </ElButton>
+        </div>
+       <router-link :to="{name: 'SignUp'}">
+       <ElLink type="primary">Don't have account? Sign Up</ElLink>
+        </router-link>
     </ElForm>
   </div>
 </template>
@@ -85,5 +95,19 @@ export default {
 </script>
 
 <style scoped>
+.login-form-description {
+  margin-bottom: 30px;
+  color: rgba(0,0,0,0.5 );
+  font-size: 14px;
+}
 
+.login-form {
+  padding: 20px 80px;
+  width: 350px;
+}
+
+.form-action {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
 </style>
