@@ -17,3 +17,13 @@ export const firebaseLogout = async () => {
     return Promise.reject(err);
   }
 };
+
+export const firebaseReset = async (email) => {
+  try {
+    const data = await firebase.auth().sendPasswordResetEmail(email);
+    // console.log(data);
+    return data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
