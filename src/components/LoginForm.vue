@@ -5,7 +5,7 @@
     <ElForm
     :model="formData"
     :rules="rules"
-    @submit.native="onSubmit"
+    @submit.native.prevent="onSubmit"
     ref="loginForm"
      >
       <ElFormItem
@@ -20,7 +20,11 @@
        prop="password"
        size="small"
     >
-       <ElInput v-model="formData.password" type="password" />
+       <ElInput
+        v-model="formData.password"
+        type="password"
+        :show-password="true"
+        />
      </ElFormItem>
      <router-link :to="{name: 'ForgotPassword'}">
        <ElLink type="info">Forgot password? Reset password</ElLink>
@@ -82,10 +86,8 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['login']), // {login :{}}
-    onSubmit(e) {
-      e.preventDefault();
+    onSubmit() {
       this.$refs.loginForm.validate((isValid) => {
-        console.log(isValid);
         if (!isValid) return;
         this.login({ ...this.formData });
       });
