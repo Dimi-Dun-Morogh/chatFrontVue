@@ -27,3 +27,13 @@ export const firebaseReset = async (email) => {
     return Promise.reject(error);
   }
 };
+
+export const firebaseSignUp = async (email, password) => {
+  try {
+    const data = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    console.log(data);
+    return data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};

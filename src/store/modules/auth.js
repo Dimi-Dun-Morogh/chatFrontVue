@@ -1,5 +1,7 @@
 import mutations from '@/store/mutations';
-import { firebaseLogin, firebaseLogout, firebaseReset } from '@/services/firebase/auth.service';
+import {
+  firebaseLogin, firebaseLogout, firebaseReset, firebaseSignUp,
+} from '@/services/firebase/auth.service';
 
 const {
   IS_LOGGED_IN,
@@ -66,6 +68,28 @@ const authStore = {
         dispatch('loadMessage', {
           type: 'success',
           message: 'password reset link sent to your email',
+          duration: 6000,
+          showClose: true,
+        }, { root: true });
+      } catch (error) {
+        dispatch('loadMessage', {
+          type: 'error',
+          message: error.message,
+          duration: 6000,
+          showClose: true,
+        }, { root: true });
+        console.log(error);
+      } finally {
+        commit(LOGIN_LOADER, false);// выключаем буль прелодера
+      }
+    },
+    async signUp({ commit, dispatch }, { email, password }) {
+      commit(LOGIN_LOADER, true);
+      try {
+        await firebaseSignUp(email, password);
+        dispatch('loadMessage', {
+          type: 'success',
+          message: 'user registration success',
           duration: 6000,
           showClose: true,
         }, { root: true });
