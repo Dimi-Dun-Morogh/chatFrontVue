@@ -78,7 +78,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('auth', ['loginInProgress', 'isLoggedIn']),
+    ...mapGetters('auth', ['loginInProgress', 'isLoggedIn', 'isFirstLogin']),
+  },
+  watch: {
+    isFirstLogin: 'redirectToFirstLoginSetup',
   },
   methods: {
     ...mapActions('auth', ['signUp']),
@@ -87,10 +90,16 @@ export default {
         console.log(isValid);
         if (!isValid) return;
         this.signUp(this.formData);
-        if (!this.isLoggedIn) {
-          this.$router.push({ name: 'Login' });
-        }
+        // if (!this.isLoggedIn) {
+        //   this.$router.push({ name: 'Login' });
+        // }
       });
+    },
+    redirectToFirstLoginSetup(val) {
+      if (val) {
+        console.log('firstlogin');
+        this.$router.push({ name: 'FirstLoginSettings' });
+      }
     },
   },
 };

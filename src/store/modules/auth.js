@@ -6,17 +6,20 @@ import {
 const {
   IS_LOGGED_IN,
   LOGIN_LOADER,
+  IS_FIRST_LOGIN,
 } = mutations;
 
 const authStore = {
   namespaced: true,
   state: {
-    isLoggedIn: false,
+    isLoggedIn: Boolean(localStorage.getItem('vue_app_token')),
     loginInProgress: false,
+    isFirstLogin: false,
   },
   getters: {
     isLoggedIn: ({ isLoggedIn }) => isLoggedIn,
     loginInProgress: ({ loginInProgress }) => loginInProgress,
+    isFirstLogin: ({ isFirstLogin }) => isFirstLogin,
   },
   mutations: {
     [IS_LOGGED_IN](state, bool) {
@@ -24,6 +27,9 @@ const authStore = {
     },
     [LOGIN_LOADER](state, bool) {
       state.loginInProgress = bool;
+    },
+    [IS_FIRST_LOGIN](state, bool) {
+      state.isFirstLogin = bool;
     },
   },
   actions: {
@@ -86,7 +92,9 @@ const authStore = {
     async signUp({ commit, dispatch }, { email, password }) {
       commit(LOGIN_LOADER, true);
       try {
-        await firebaseSignUp(email, password);
+        const data = await firebaseSignUp(email, password);
+        commit(IS_FIRST_LOGIN, data.additionalUserInfo.isNewUser);
+        console.log(`first login is ${data.additionalUserInfo.isNewUser}`);
         dispatch('loadMessage', {
           type: 'success',
           message: 'user registration success',

@@ -37,3 +37,13 @@ export const firebaseSignUp = async (email, password) => {
     return Promise.reject(error);
   }
 };
+
+export const getUserIdToken = async () => {
+  try {
+    const token = await firebase.auth().currentUser.getIdToken();
+    // console.log(data);
+    return token;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};

@@ -1,24 +1,8 @@
-# chat
 
-## Project setup
-```
-npm install
-```
+- [x] Реализовать функционал Forgot Password
+- [x] Реализовать функционал Sign Up
+- [ ] Создать страницу Settings. На данной странице должна быть форма редактирования информации о пользователе а так же форма для изменения пароля пользователем. Для изменения пароля пользователь должен ввести старый пароль и новый пароль.
+- [ ] Добавить метод получения залогиненого пользователя по email. Его нужно вызывать после успешного логина а также после заполнения пользователем информации на странице FirstLoginSettings
+- [ ] Добавить нотификации об успешном обновлении информации пользователем.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
