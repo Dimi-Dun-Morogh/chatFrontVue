@@ -3,11 +3,13 @@
     <ElCard class="first-setup-form">
       <div slot="header" class="clearfix">
         <h6 class="card-title">Welcome!</h6>
-        <p class="card-description">Let's get acquainted. Tell us about yourself</p>
+        <p class="card-description">You can update your info here</p>
       </div>
       <ElForm :model="formData" @submit.native.prevent="onSubmit" ref="settingsForm">
         <ElFormItem label="First Name" prop="firstName" size="small">
-          <ElInput type="text" v-model="formData.firstName" />
+          <ElInput type="text"
+          v-model="formData.firstName"
+           />
         </ElFormItem>
         <ElFormItem label="Last Name" prop="lastName" size="small">
           <ElInput type="text" v-model="formData.lastName" />
@@ -18,7 +20,8 @@
         <ElFormItem label="City" prop="city" size="small">
           <ElInput type="text" v-model="formData.city" />
         </ElFormItem>
-        <ElButton native-type="submit" type="primary" :loading="loginInProgress">Submit</ElButton>
+        <ElButton native-type="submit" type="primary" :loading="loginInProgress">Update</ElButton>
+        <!-- {{ user.firstName }} -->
       </ElForm>
     </ElCard>
   </div>
@@ -28,7 +31,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'FirstLoginSettingsForm',
+  name: 'UpdateInfoForm',
   data: () => ({
     formData: {
       firstName: '',
@@ -38,21 +41,22 @@ export default {
     },
   }),
   computed: {
-    ...mapGetters('auth', ['loginInProgress', 'isFirstLogin']),
+    ...mapGetters('auth', ['loginInProgress']),
+    ...mapGetters(['user']),
   },
-  watch: {},
+  watch: {
+    user: 'placeHolders',
+  },
   methods: {
-    ...mapActions(['createUserInfo', 'getUserByMail', 'setFirstLoginState']),
+    ...mapActions(['updateUserInfo']),
+    placeHolders() {
+      this.formData.firstName = this.user.firstName;
+      this.formData.lastName = this.user.lastName;
+      this.formData.country = this.user.country;
+      this.formData.city = this.user.city;
+    },
     onSubmit() {
-      this.$refs.settingsForm.validate((isValid) => {
-        if (!isValid) return;
-        try {
-          this.createUserInfo({ ...this.formData });
-          this.getUserByMail();
-        } catch (error) {
-          console.log(error);
-        }
-      });
+      this.updateUserInfo({ ...this.formData, email: this.user.email });
     },
   },
 };
@@ -61,34 +65,10 @@ export default {
 <style scoped>
 .first-setup-form-wrap {
   position: relative;
-  max-width: 500px;
-  width: 100%;
+  /* max-width: 500px; */
+  /* width: 500px; */
 }
-.first-setup-form {
-  width: 100%;
-  max-width: 400px;
-}
-.first-setup-form-wrap::before {
-  content: "";
-  position: absolute;
-  width: 256px;
-  height: 256px;
-  background: url("../assets/party-baloons.png");
-  left: 0;
-  transform: translateX(-70%) rotate(-45deg);
-  z-index: -1;
-}
-.first-setup-form-wrap::after {
-  content: "";
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  background: url("../assets/dancing-party.png");
-  right: 0;
-  bottom: 0;
-  transform: translateX(20%);
-  z-index: -1;
-}
+
 .card-title {
   font-size: 20px;
   text-transform: uppercase;

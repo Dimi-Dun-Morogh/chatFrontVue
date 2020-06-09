@@ -1,13 +1,13 @@
 import mutations from '@/store/mutations';
 import {
-  firebaseLogin, firebaseLogout, firebaseReset, firebaseSignUp,
+  firebaseLogin,
+  firebaseLogout,
+  firebaseReset,
+  firebaseSignUp,
+  checkPassword,
 } from '@/services/firebase/auth.service';
 
-const {
-  IS_LOGGED_IN,
-  LOGIN_LOADER,
-  IS_FIRST_LOGIN,
-} = mutations;
+const { IS_LOGGED_IN, LOGIN_LOADER, IS_FIRST_LOGIN } = mutations;
 
 const authStore = {
   namespaced: true,
@@ -59,14 +59,18 @@ const authStore = {
         commit(LOGIN_LOADER, true);
         await firebaseLogin(email, password);
       } catch (error) {
-        dispatch('loadMessage', {
-          type: 'error',
-          message: error.message,
-          duration: 6000,
-          showClose: true,
-        }, { root: true });
+        dispatch(
+          'loadMessage',
+          {
+            type: 'error',
+            message: error.message,
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
       } finally {
-        commit(LOGIN_LOADER, false);// выключаем буль прелодера
+        commit(LOGIN_LOADER, false); // выключаем буль прелодера
       }
     },
     async logout() {
@@ -83,22 +87,30 @@ const authStore = {
       console.log(`email is ${email}`);
       try {
         await firebaseReset(email);
-        dispatch('loadMessage', {
-          type: 'success',
-          message: 'password reset link sent to your email',
-          duration: 6000,
-          showClose: true,
-        }, { root: true });
+        dispatch(
+          'loadMessage',
+          {
+            type: 'success',
+            message: 'password reset link sent to your email',
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
       } catch (error) {
-        dispatch('loadMessage', {
-          type: 'error',
-          message: error.message,
-          duration: 6000,
-          showClose: true,
-        }, { root: true });
+        dispatch(
+          'loadMessage',
+          {
+            type: 'error',
+            message: error.message,
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
         console.log(error);
       } finally {
-        commit(LOGIN_LOADER, false);// выключаем буль прелодера
+        commit(LOGIN_LOADER, false); // выключаем буль прелодера
       }
     },
     async signUp({ commit, dispatch }, { email, password }) {
@@ -107,24 +119,65 @@ const authStore = {
         const data = await firebaseSignUp(email, password);
         commit(IS_FIRST_LOGIN, data.additionalUserInfo.isNewUser);
         console.log(`first login is ${data.additionalUserInfo.isNewUser}`);
-        dispatch('loadMessage', {
-          type: 'success',
-          message: 'user registration success',
-          duration: 6000,
-          showClose: true,
-        }, { root: true });
+        dispatch(
+          'loadMessage',
+          {
+            type: 'success',
+            message: 'user registration success',
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
       } catch (error) {
-        dispatch('loadMessage', {
-          type: 'error',
-          message: error.message,
-          duration: 6000,
-          showClose: true,
-        }, { root: true });
+        dispatch(
+          'loadMessage',
+          {
+            type: 'error',
+            message: error.message,
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
         console.log(error);
       } finally {
-        commit(LOGIN_LOADER, false);// выключаем буль прелодера
+        commit(LOGIN_LOADER, false); // выключаем буль прелодера
       }
     },
+    async oldPasswordCheck({ dispatch, commit }, { oldPassword, newPassword }) {
+      commit(LOGIN_LOADER, true);
+      try {
+        const data = await checkPassword(oldPassword, newPassword);
+        // console.log(oldPassword, newPassword);
+        console.log(data);
+        dispatch(
+          'loadMessage',
+          {
+            type: 'success',
+            message: 'Password change success',
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          'loadMessage',
+          {
+            type: 'error',
+            message: error.message,
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
+      } finally {
+        commit(LOGIN_LOADER, false);
+      }
+    },
+
   },
 };
 

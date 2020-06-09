@@ -47,3 +47,22 @@ export const getUserIdToken = async () => {
     return Promise.reject(error);
   }
 };
+
+export const checkPassword = async (oldPassword, newPassword) => {
+  try {
+  // cобираем креденшлы из мыла залогиненого юзера и введеного пароля
+    const credentials = firebase.auth.EmailAuthProvider.credential(
+      firebase.auth().currentUser.email,
+      oldPassword,
+    );
+    // перелогиниваемся
+    await firebase.auth().currentUser.reauthenticateWithCredential(credentials);
+    // тут можно впилить новЫЙ пароль
+    // console.log(newPassword);
+    const data = await firebase.auth().currentUser.updatePassword(newPassword);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return Promise.reject(error);
+  }
+};

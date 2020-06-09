@@ -33,6 +33,11 @@ const routes = [
     name: 'FirstLoginSettings',
     component: () => import('../views/FirstLoginSettings.vue'),
   },
+  {
+    path: '/update-info',
+    name: 'Update-Info',
+    component: () => import('../views/UpdateInfo.vue'),
+  },
 
 ];
 

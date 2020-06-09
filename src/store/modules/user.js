@@ -37,15 +37,43 @@ const userStore = {
       dispatch('setLoginLoader', true);
       try {
         const user = await axios.post('/users', data);
-        dispatch('loadMessage', {
-          type: 'success',
-          message: 'thank you for sharing info, you will be redirected to homepage',
-          duration: 6000,
-          showClose: true,
-        }, { root: true });
+        dispatch(
+          'loadMessage',
+          {
+            type: 'success',
+            message: 'thank you for sharing info, you will be redirected to homepage',
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
         setTimeout(() => {
           router.push({ name: 'Home' });
         }, 6000);
+        console.log(user);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        dispatch('setLoginLoader', false);
+      }
+    },
+    async updateUserInfo({ dispatch }, data) {
+      dispatch('setLoginLoader', true);
+      try {
+        const user = await axios.post('/users/update-user', data);
+        dispatch(
+          'loadMessage',
+          {
+            type: 'success',
+            message: 'Information updated succesfully',
+            duration: 6000,
+            showClose: true,
+          },
+          { root: true },
+        );
+        // setTimeout(() => {
+        //   router.push({ name: 'Home' });
+        // }, 6000);
         console.log(user);
       } catch (error) {
         console.log(error);
