@@ -33,9 +33,21 @@ const authStore = {
     },
   },
   actions: {
+    setLoginLoader: {
+      handler({ commit }, bool) {
+        commit(LOGIN_LOADER, bool);
+      },
+      root: true,
+    },
     setIsLoggedInState: {
       handler({ commit }, bool) {
         commit(IS_LOGGED_IN, bool);
+      },
+      root: true,
+    },
+    setFirstLoginState: {
+      handler({ commit }, bool) {
+        commit(IS_FIRST_LOGIN, bool);
       },
       root: true,
     },
