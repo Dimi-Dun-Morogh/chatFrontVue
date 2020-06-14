@@ -6,6 +6,7 @@ import { getUserIdToken } from '../services/firebase/auth.service';
 import notify from './modules/notify';
 import user from './modules/user';
 import authGuard from '../guards/auth.guard';
+import chats from './modules/Chats';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
     auth,
     notify,
     user,
+    chats,
   },
 });
 
