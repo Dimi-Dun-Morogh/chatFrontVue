@@ -13,6 +13,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import ChatListItem from './ChatListItem.vue';
+import Emitters from '../plugins/socket/emitters';
 
 export default {
   name: 'Chatslist',
@@ -26,6 +27,7 @@ export default {
     ...mapActions('chats', ['getPublicChats', 'selectChat']),
     onChatSelect(id) {
       this.selectChat(id);
+      this.$socket.emit(Emitters.SELECT_CHAT, { chatId: id });
     },
   },
   mounted() {
