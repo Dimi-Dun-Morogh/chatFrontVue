@@ -3,12 +3,14 @@
    :class="chatClasses"
    @click="selectChat"
    >
-    <div class="chat-item-avatar">    </div>
+    <div class="chat-item-avatar">
+      <span v-if="isNewMessage" class="new-message">  </span>
+        </div>
     <!-- /.chat-avatar -->
       <div class="chat-item-info">
         <div class="chat-name">
           <span class="chat-name-text"> {{ chatName }}</span>
-          <span class="chat-update-time">-</span>
+          <span class="chat-update-time"> {{ lastMsgTime | passedTime }}</span>
         </div>
         <p class="chat-item-last-msg"> {{ lastMsg }} </p>
       </div>
@@ -29,16 +31,23 @@ export default {
       type: Boolean,
       default: false,
     },
+    chatIdsPool: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
+    isNewMessage() {
+      return this.chatIdsPool.includes(this.chat._id);
+    },
     chatName() {
       return this.chat.name;
     },
     lastMsgTime() {
-      return this.chat.lastMessage.Time || '-';
+      return this.chat.lastMessage ? this.chat.lastMessage.time : '-';
     },
     lastMsg() {
-      return this.chat.lastMessage !== undefined ? this.chat.lastMessage : 'No messages';
+      return this.chat.lastMessage !== undefined ? this.chat.lastMessage.text : 'No messages';
     },
     chatClasses() {
       return {
@@ -72,9 +81,22 @@ export default {
   background-color: #c8c7ed;
   width: 40px;
   height: 40px;
+  position: relative;
+}
+
+.new-message {
+  position: absolute;
+  height: 12px;
+  width: 12px;
+  background-color:red;
+  border-radius: 50%;
+  top: -4px;
+  right: -4px;
 }
 .chat-item-info {
   margin-left: 10px;
+  min-width: 70%;
+  flex-grow: 1;
 }
 .chat-name {
   display: flex;
@@ -95,5 +117,8 @@ export default {
   font-size: 12px;
   line-height: 1.3;
   color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
